@@ -9,12 +9,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("com.atguigu")
 @PropertySource("classpath:jdbc.properties")
+@EnableTransactionManagement
 public class JavaConfig {
 
     @Value("${atguigu.driver}")
@@ -48,8 +50,10 @@ public class JavaConfig {
         return jdbcTemplate;
     }
 
-    public TransactionManager transactionManager(){
+    @Bean
+    public TransactionManager transactionManager(DataSource dataSource){
         DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
+        dataSourceTransactionManager.setDataSource(dataSource);
         return dataSourceTransactionManager;
     }
 
